@@ -13,6 +13,7 @@ import server.zone.objects.area.ActiveArea;
 import server.zone.objects.area.CampSiteObserver;
 import server.zone.objects.area.events.CampDespawnTask;
 import server.zone.objects.area.events.CampAbandonTask;
+import server.zone.objects.area.events.CampAbandonWarnTask;
 include templates.building.CampStructureTemplate;
 include system.thread.Mutex;
 import system.lang.Time;
@@ -36,6 +37,7 @@ class CampSiteActiveArea extends ActiveArea {
 	protected CampSiteObserver campObserver;
 
 	protected transient CampAbandonTask abandonTask;
+	protected transient CampAbandonWarnTask abandonWarnTask;
 	protected transient CampDespawnTask despawnTask;
 
 	protected CreatureObject campOwner;
@@ -48,11 +50,14 @@ class CampSiteActiveArea extends ActiveArea {
 	@dereferenced
 	protected TemplateReference<CampStructureTemplate> campStructureData;
 
-	// 55 minutes
-	public final static int DESPAWNTIME = 3300000;
+	//100 minutes
+	public final static int DESPAWNTIME = 6000000;
 
-	// 1 minute
-	public final static int ABANDONTIME = 60000;
+	//30 minutes
+	public final static int ABANDONTIME = 1800000;
+
+	//30 second warning
+	public final static int ABANDONWARNTIME = 1770000;
 
 	public CampSiteActiveArea() {
 		Logger.setLoggingName("CampsiteActiveArea");
@@ -149,6 +154,9 @@ class CampSiteActiveArea extends ActiveArea {
 
 	@preLocked
 	public native void abandonCamp();
+
+	@preLocked
+	public native void warnAbandonCamp();
 
 	@preLocked
 	public native void setAbandoned(boolean isAbandoned);

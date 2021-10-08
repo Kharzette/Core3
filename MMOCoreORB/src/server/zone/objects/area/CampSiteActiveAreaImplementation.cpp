@@ -16,6 +16,7 @@
 #include "server/zone/objects/tangible/terminal/Terminal.h"
 #include "server/zone/Zone.h"
 #include "server/zone/objects/area/events/CampAbandonTask.h"
+#include "server/zone/objects/area/events/CampAbandonWarnTask.h"
 #include "server/zone/objects/area/events/CampDespawnTask.h"
 
 void CampSiteActiveAreaImplementation::initializeTransientMembers() {
@@ -57,8 +58,16 @@ void CampSiteActiveAreaImplementation::startTasks() {
 			abandonTask->cancel();
 	}
 
+	if(abandonWarnTask == nullptr) {
+		abandonWarnTask = new CampAbandonWarnTask(_this.getReferenceUnsafeStaticCast());
+	} else {
+		if(abandonWarnTask->isScheduled())
+			abandonWarnTask->cancel();
+	}
+
 	despawnTask->schedule(CampSiteActiveArea::DESPAWNTIME);
 	abandonTask->schedule(CampSiteActiveArea::ABANDONTIME);
+	abandonWarnTask->schedule(CampSiteActiveArea::ABANDONWARNTIME);
 
 }
 
@@ -87,6 +96,11 @@ void CampSiteActiveAreaImplementation::notifyEnter(SceneObject* object) {
 
 		if(abandonTask != nullptr && abandonTask->isScheduled())
 			abandonTask->cancel();
+
+		if(abandonWarnTask != nullptr && abandonWarnTask->isScheduled())
+		{
+			abandonWarnTask->cancel();
+		}
 
 		object->registerObserver(ObserverEventType::STARTCOMBAT, campObserver);
 
@@ -139,6 +153,15 @@ void CampSiteActiveAreaImplementation::notifyExit(SceneObject* object) {
 
 		}
 	}
+
+	//warning timer
+	if(!abandoned && abandonWarnTask != nullptr && !abandonWarnTask->isScheduled()) {
+		try {
+			abandonWarnTask->schedule(CampSiteActiveArea::ABANDONWARNTIME);
+		} catch (Exception& e) {
+
+		}
+	}
 }
 
 int CampSiteActiveAreaImplementation::notifyHealEvent(int64 quantity) {
@@ -152,6 +175,8 @@ int CampSiteActiveAreaImplementation::notifyHealEvent(int64 quantity) {
 int CampSiteActiveAreaImplementation::notifyCombatEvent() {
 	Locker locker(&taskMutex);
 
+	//Kharzette.  We donut care about combat
+	/*
 	if(abandonTask != nullptr) {
 		if(abandonTask->isScheduled())
 			abandonTask->cancel();
@@ -160,7 +185,7 @@ int CampSiteActiveAreaImplementation::notifyCombatEvent() {
 		abandonTask = new CampAbandonTask(_this.getReferenceUnsafeStaticCast());
 	}
 
-	abandonTask->execute();
+	abandonTask->execute();*/
 
 	return 1;
 }
@@ -228,6 +253,14 @@ void CampSiteActiveAreaImplementation::abandonCamp() {
 	}
 }
 
+void CampSiteActiveAreaImplementation::warnAbandonCamp()
+{
+	if(campOwner != nullptr)
+	{
+		campOwner->sendSystemMessage("Your camp will be abandoned in thirty seconds!");
+	}
+}
+
 bool CampSiteActiveAreaImplementation::despawnCamp() {
 	Locker locker(_this.getReferenceUnsafeStaticCast());
 
@@ -266,6 +299,12 @@ bool CampSiteActiveAreaImplementation::despawnCamp() {
 		if(abandonTask->isScheduled())
 			abandonTask->cancel();
 		abandonTask = nullptr;
+	}
+
+	if(abandonWarnTask != nullptr) {
+		if(abandonWarnTask->isScheduled())
+			abandonWarnTask->cancel();
+		abandonWarnTask = nullptr;
 	}
 
 	tlocker.release();
@@ -371,7 +410,10 @@ void CampSiteActiveAreaImplementation::assumeOwnership(CreatureObject* player) {
 	if (abandonTask != nullptr && abandonTask->isScheduled())
 		abandonTask->cancel();
 
-	if (despawnTask != nullptr && despawnTask->isScheduled())
+	if(abandonWarnTask != nullptr && abandonWarnTask->isScheduled())
+		abandonWarnTask->cancel();
+
+	if(despawnTask != nullptr && despawnTask->isScheduled())
 		despawnTask->cancel();
 
 	timeCreated = System::getTime();
