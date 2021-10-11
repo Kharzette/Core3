@@ -57,13 +57,30 @@ public:
 
 		StructureManager* structureManager = StructureManager::instance();
 
+		int				amount		=0;
+		bool			bBankPay	=false;
+		StringBuffer	bankText;
+
 		try {
 			UnicodeTokenizer tokenizer(arguments);
-			int amount = tokenizer.getIntToken();
+			amount	=tokenizer.getIntToken();
 
-			if (amount > 0)
-				structureManager->payMaintenance(structure, creature, amount);
-		} catch (Exception& e) {
+			if(tokenizer.hasMoreTokens())
+			{
+				tokenizer.getStringToken(bankText);
+
+				bankText.doUpperCase();
+
+				bBankPay	=(bankText == "BANK");
+			}
+
+			if(amount > 0)
+			{
+				structureManager->payMaintenance(structure, creature, amount, bBankPay);
+			}
+		}
+		catch(Exception& e)
+		{
 			structureManager->promptPayMaintenance(structure, creature);
 		}
 
