@@ -180,7 +180,7 @@ public:
 	 * @param creature The creature attempting to pay maintenance.
 	 * @param amount The amount to pay maintenance.
 	 */
-	void payMaintenance(StructureObject* structure, CreatureObject* creature, int amount);
+	void payMaintenance(StructureObject* structure, CreatureObject* creature, int amount, bool bBank = false);
 
 	/**
 	 * Attempts to withdraw the requested amount from the structure, and notifies the creature.
