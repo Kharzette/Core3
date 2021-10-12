@@ -69,9 +69,10 @@ public:
 			{
 				tokenizer.getStringToken(bankText);
 
-				bankText.doUpperCase();
+				String	bankStr	=bankText.toString();
 
-				bBankPay	=(bankText == "BANK");
+				bankStr.changeToUpperCase();
+				bBankPay	=(bankStr == "BANK");				
 			}
 
 			if(amount > 0)

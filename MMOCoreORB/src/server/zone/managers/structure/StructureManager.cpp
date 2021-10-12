@@ -1198,10 +1198,11 @@ void StructureManager::promptPayUncondemnMaintenance(CreatureObject* creature, S
 
 void StructureManager::promptPayMaintenance(StructureObject* structure, CreatureObject* creature, SceneObject* terminal)
 {
-	int	cashCredits	=creature->getCashCredits();
-	int	bankCredits	=creature->getBankCredits();
+	int	cashCredits		=creature->getCashCredits();
+	int	bankCredits		=creature->getBankCredits();
+	int	totalCredits	=cashCredits + bankCredits;
 
-	if(cashCredits <= 0 && bankCredits <= 0)
+	if(totalCredits <= 0)
 	{
 		creature->sendSystemMessage("@player_structure:no_money"); //You do not have any money to pay maintenance.
 		return;
@@ -1227,8 +1228,8 @@ void StructureManager::promptPayMaintenance(StructureObject* structure, Creature
 
 	//cash + bank
 	sui->addFrom("@player_structure:total_funds",
-			String::valueOf(0),
-			String::valueOf(cashCredits + bankCredits), "1");
+			String::valueOf(totalCredits),
+			String::valueOf(totalCredits), "1");
 	sui->addTo("@player_structure:to_pay", "0", "0", "1");
 
 	ghost->addSuiBox(sui);
