@@ -7,12 +7,47 @@ package server.zone.objects.tangible.terminal.spaceship;
 
 import server.zone.objects.tangible.terminal.Terminal;
 import server.zone.objects.creature.CreatureObject;
+import server.zone.Zone;
+import server.zone.managers.planet.PlanetManager;
+include server.zone.managers.planet.PlanetTravelPoint;
 
 @json
 class SpaceshipTerminal extends Terminal {
+	@local
+	private transient PlanetTravelPoint planetTravelPoint;
+
 	public SpaceshipTerminal() {
+		Logger.setLoggingName("SpaceshipTerminal");
+		planetTravelPoint = null;
+	}
+
+	public void initializeTransientMembers() {
+		super.initializeTransientMembers();
+
 		Logger.setLoggingName("SpaceshipTerminal");
 	}
 
+	public native void notifyInsertToZone(Zone zone);
+
 	public native int handleObjectMenuSelect(CreatureObject player, byte selectedID);
+
+	/**
+	 * Return the planetTravelPoint for this Travel Terminal
+	 *
+	 * NOTE: Resolution of the planetTravelPoint is delayed so the PlanetTravelPoints can get properly updated as objects load
+	 */
+	@local
+	@dirty
+	public PlanetTravelPoint getPlanetTravelPoint() {
+		if (planetTravelPoint)
+		    return planetTravelPoint;
+
+		Zone zone = getZone();
+
+		if (zone) {
+			planetTravelPoint = zone.getPlanetManager().getNearestPlanetTravelPoint(this);
+		}
+
+		return planetTravelPoint;
+	}
 }
