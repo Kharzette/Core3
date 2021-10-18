@@ -25,6 +25,8 @@
 #include "server/chat/ChatManager.h"
 #include "server/zone/managers/stringid/StringIdManager.h"
 #include "server/zone/objects/transaction/TransactionLog.h"
+#include "conf/ConfigManager.h"
+
 
 void StructureObjectImplementation::loadTemplateData(SharedObjectTemplate* templateData) {
 	TangibleObjectImplementation::loadTemplateData(templateData);
@@ -42,6 +44,11 @@ void StructureObjectImplementation::initializeTransientMembers() {
 	TangibleObjectImplementation::initializeTransientMembers();
 
 	Logger::setLoggingName("StructureObject");
+
+	//TODO: is this expensive?  This might happen per structure
+	auto	configManager	=ConfigManager::instance();
+
+	maintScalar	=configManager->getMaintenanceScalar();
 }
 
 void StructureObjectImplementation::finalize() {
@@ -278,8 +285,12 @@ CreatureObject* StructureObjectImplementation::getOwnerCreatureObject() const {
 	}
 }
 
-float StructureObjectImplementation::getMaintenanceRate() const {
+float StructureObjectImplementation::getMaintenanceRate() const
+{
 	float rate = getBaseMaintenanceRate();
+
+	//scale by config scalar
+	rate	*=maintScalar;
 
 #if DEBUG_STRUCTURE_RAPID_DECAY
 	rate *= 10000.0f; // Make structures really expensive

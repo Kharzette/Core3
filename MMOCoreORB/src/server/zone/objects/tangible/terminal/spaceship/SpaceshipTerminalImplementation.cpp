@@ -67,7 +67,7 @@ int SpaceshipTerminalImplementation::handleObjectMenuSelect(CreatureObject* play
 
 		String	zn	=pZ->getZoneName();
 
-		pBox->addMenuItem(zn, pZ->_getObjectID());
+		pBox->addMenuItem(zn, i);
 	}
 
 	pBox->setPromptText("Choose a planet to fly to:");

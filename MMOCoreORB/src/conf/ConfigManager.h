@@ -270,6 +270,10 @@ namespace conf {
 			return getBool("Core3.DumpObjFiles", true);
 		}
 
+		inline float getMaintenanceScalar() {
+			return getFloat("Core3.MaintenanceScalar", 1.0f);
+		}
+
 		inline bool shouldUnloadContainers() {
 			// Use cached value as this is called often
 			static uint32 cachedVersion = 0;
