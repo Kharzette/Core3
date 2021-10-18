@@ -547,6 +547,11 @@ int PlanetManagerImplementation::getTravelFare(const String& departurePlanet, co
 	return fare;
 }
 
+PlanetTravelPointList *PlanetManagerImplementation::getTravelPointList()
+{
+	return	planetTravelPointList;
+}
+
 Reference<SceneObject*> PlanetManagerImplementation::loadSnapshotObject(WorldSnapshotNode* node, WorldSnapshotIff* wsiff, int& totalObjects) {
 	uint64 objectID = node->getObjectID();
 	String templateName = wsiff->getObjectTemplateName(node->getNameID());
