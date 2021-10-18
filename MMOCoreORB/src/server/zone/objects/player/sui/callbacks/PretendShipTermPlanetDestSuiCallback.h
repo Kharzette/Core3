@@ -33,7 +33,9 @@ public:
 			return;
 		}
 
-		ShipTerminalHelper::sListPlanetaryDestinations(pCreature, idx);
+		int	planetIndex	=pListBox->getMenuObjectID(idx);
+
+		ShipTerminalHelper::sListPlanetaryDestinations(pCreature, planetIndex);
 	}
 };
 

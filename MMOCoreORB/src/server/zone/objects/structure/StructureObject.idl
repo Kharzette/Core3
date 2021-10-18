@@ -40,6 +40,7 @@ class StructureObject extends TangibleObject {
 
 	protected float surplusMaintenance;
 	protected float surplusPower;
+	protected float maintScalar;
 
 	protected boolean maintenanceReduced;
 
