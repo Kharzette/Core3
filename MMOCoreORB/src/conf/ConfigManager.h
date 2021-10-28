@@ -274,6 +274,10 @@ namespace conf {
 			return getFloat("Core3.MaintenanceScalar", 1.0f);
 		}
 
+		inline float getExtractionRateScalar() {
+			return getFloat("Core3.ExtractionRateScalar", 1.0f);
+		}
+
 		inline bool shouldUnloadContainers() {
 			// Use cached value as this is called often
 			static uint32 cachedVersion = 0;
