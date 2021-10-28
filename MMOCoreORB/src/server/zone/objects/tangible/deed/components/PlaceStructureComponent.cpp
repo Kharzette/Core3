@@ -26,9 +26,14 @@ int PlaceStructureComponent::notifyStructurePlaced(StructureDeed* deed, Creature
 	structureObject->setSurplusMaintenance(deed->getSurplusMaintenance());
 	structureObject->setSurplusPower(deed->getSurplusPower());
 
-	if (structureObject->isInstallationObject()) {
+	if(structureObject->isInstallationObject())
+	{
 		InstallationObject* installationObject = cast<InstallationObject*>(structureObject);
-		installationObject->setExtractionRate(deed->getExtractionRate());
+
+		//TODO: is this expensive?  This might happen per structure
+		auto	configManager	=ConfigManager::instance();
+
+		installationObject->setExtractionRate(deed->getExtractionRate() * configManager->getExtractionRateScalar());
 		installationObject->setHopperSizeMax(deed->getHopperSize());
 	}
 
