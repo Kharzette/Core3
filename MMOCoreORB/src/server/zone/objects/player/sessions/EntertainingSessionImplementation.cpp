@@ -691,13 +691,52 @@ void EntertainingSessionImplementation::doFlourish(int flourishNumber, bool gran
 	}
 }
 
-void EntertainingSessionImplementation::addEntertainerBuffDuration(CreatureObject* creature, int performanceType, float duration) {
+void EntertainingSessionImplementation::addEntertainerBuffDuration(CreatureObject* creature, int performanceType, float duration)
+{
 	int buffDuration = getEntertainerBuffDuration(creature, performanceType);
 
 	buffDuration += duration;
 
-	if (buffDuration > (120.0f + (10.0f / 60.0f)) ) // 2 hrs 10 seconds
-		buffDuration = (120.0f + (10.0f / 60.0f)); // 2hrs 10 seconds
+	int	maxDuration	=(120.0f + (10.0f / 60.0f));	//2 hrs 10 seconds
+
+	if(buffDuration > maxDuration)
+	{
+		buffDuration	=maxDuration;
+
+		if(!mNotified100.contains(creature))
+		{
+			creature->sendSystemMessage(entertainer.get()->getFirstName() + "'s performance is complete!");
+
+			mNotified100.put(creature, true);
+		}
+	}
+	else if(buffDuration > (maxDuration * 0.75f))
+	{
+		if(!mNotified75.contains(creature))
+		{
+			creature->sendSystemMessage("The performance is 75% complete...");
+
+			mNotified75.put(creature, true);
+		}
+	}
+	else if(buffDuration > (maxDuration * 0.5f))
+	{
+		if(!mNotified50.contains(creature))
+		{
+			creature->sendSystemMessage("The performance is 50% complete...");
+
+			mNotified50.put(creature, true);
+		}
+	}
+	else if(buffDuration > (maxDuration * 0.25f))
+	{
+		if(!mNotified25.contains(creature))
+		{
+			creature->sendSystemMessage(entertainer.get()->getFirstName() + " is enhancing you via performance!  The performance is 25% complete...");
+
+			mNotified25.put(creature, true);
+		}
+	}
 
 	setEntertainerBuffDuration(creature, performanceType, buffDuration);
 }
@@ -847,6 +886,12 @@ void EntertainingSessionImplementation::sendEntertainingUpdate(CreatureObject* c
 
 void EntertainingSessionImplementation::activateEntertainerBuff(CreatureObject* creature, int performanceType) {
 	ManagedReference<CreatureObject*> entertainer = this->entertainer.get();
+
+	//clear notifies
+	mNotified100.drop(creature);
+	mNotified75.drop(creature);
+	mNotified50.drop(creature);
+	mNotified25.drop(creature);
 
 	try {
 		//Check if on Deny Service list

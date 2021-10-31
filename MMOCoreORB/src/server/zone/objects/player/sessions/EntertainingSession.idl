@@ -8,6 +8,7 @@ import engine.log.Logger;
 import engine.util.Facade;
 import system.util.SortedVector;
 include system.util.Vector;
+include system.util.VectorMap;
 include server.zone.objects.player.EntertainingDataMap;
 import server.zone.objects.creature.CreatureObject;
 import server.zone.objects.tangible.Instrument;
@@ -27,6 +28,15 @@ class EntertainingSession extends Facade {
 
 	@dereferenced
 	protected SortedVector<CreatureObject> denyServiceList;
+
+	@dereferenced
+	protected VectorMap<CreatureObject, boolean>	mNotified25;	//creatures notified of 25% progress
+	@dereferenced
+	protected VectorMap<CreatureObject, boolean>	mNotified50;	//creatures notified of 50% progress
+	@dereferenced
+	protected VectorMap<CreatureObject, boolean>	mNotified75;	//creatures notified of 75% progress
+	@dereferenced
+	protected VectorMap<CreatureObject, boolean>	mNotified100;	//creatures notified of 100% progress
 
 	protected transient EntertainingSessionTask tickTask;
 
