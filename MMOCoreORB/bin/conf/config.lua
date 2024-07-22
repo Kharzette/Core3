@@ -112,43 +112,38 @@ Core3 = {
 	--"11",
 	--"character_farm",
 	--"cinco_city_test_m5",
+	"corellia",
 	--"creature_test",
+	"dantooine",
+	"dathomir",
+	--"dungeon1",
+	"endor",
 	--"endor_asommers",
 	--"floratest",
 	--"godclient_test",
+	"lok",
+	"naboo",
 	--"otoh_gunga",
 	--"rivertest",
+	"rori",
 	--"runtimerules",
 	--"simple",
 	--"taanab",
+	"talus",
+	"tatooine",
 	--"test_wearables",
 	--"umbra",
 	--"watertabletest",
-	},
-	-------- SPACE ZONES -------
-	SpaceZonesEnabled = {
-		"space_corellia",
-		"space_dantooine",
-		"space_dathomir",
-		"space_endor",
-		"space_heavy1",
-		"space_light1",
-		"space_lok",
-		"space_naboo",
-		"space_tatooine",
-		"space_yavin4"
-		---- TEST ZONES ----
-		--"space_09",
-		--"space_corellia_2",
-		--"space_env",
-		--"space_halos",
-		--"space_naboo_2",
-		--"space_tatooine_2",
+	"yavin4"
 	},
 
-	------TRE config------
-	TrePath = "/home/swgemu/Desktop/SWGEmu",
+
+	-- Where tre files are stored
+	TrePath = "/home/kharzette/SWGEmu",
+
+	-- Each tre file (order is important!)
 	TreFiles = {
+        "ZetteServer.tre",
 		"default_patch.tre",
 		"patch_sku1_14_00.tre",
 		"patch_14_00.tre",
@@ -213,7 +208,15 @@ Core3 = {
 	WebErrorLog = "../log/weberror.log",
 	WebSessionTimeout = 600, -- Length that inactive web sessions expire
 
-	------Logging Config------
+	DeleteCharacters = 10, -- How often in minutes to purge deleted characters
+	MaxNavMeshJobs = 6,
+	MaxAuctionSearchJobs = 1,
+	DumpObjFiles = 1,
+    MaintenanceScalar = 0.1,
+	ExtractionRateScalar = 10,
+	
+	UnloadContainers = 1, -- Whether to unload container contents from RAM after the container hasn't been accessed for a time
+
 	LogFile = "log/core3.log",
 	LogFileLevel = 4, -- -1 NONE, 0 FATAL, 1 ERROR, 2 WARNING, 3 LOG, 4 INFO, 5 DEBUG
 	LogJSON = 0, -- global log output in JSON format
@@ -230,9 +233,7 @@ Core3 = {
 	InactiveAccountTitle = "Account Disabled",
 	InactiveAccountText = "The server administrators have disabled your account.",
 
-	------Character Config------
-	CleanupMailCount = 25000,
-	DeleteCharacters = 10, -- How often in minutes to purge deleted characters
+	CharacterBuilderEnabled = "false", -- Enable character builder terminals by default
 
 	------Extra Config ------
 	MaxNavMeshJobs = 6,

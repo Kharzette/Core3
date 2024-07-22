@@ -7,7 +7,7 @@ startingCash = 100
 startingBank = 1000
 --startingBank = 100000
 --How many skill points a new characters start with
-skillPoints = 250
+skillPoints = 11250
 
 professions = {
 	"combat_brawler",
