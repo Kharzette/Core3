@@ -448,15 +448,31 @@ void InstallationObjectImplementation::updateHopper(Time& workingTime, bool shut
 	// Update Timestamp
 	resourceHopperTimestamp.updateToCurrentTime();
 
-	if((int)getHopperSize() >= (int)getHopperSizeMax())
-		shutdownAfterUpdate = true;
+	int	hopperSize, hopperSizeMax;
+
+	hopperSize		=getHopperSize();
+	hopperSizeMax	=getHopperSizeMax();
+
+	if(hopperSize >= hopperSizeMax)
+	{
+		shutdownAfterUpdate	=true;
+	}
 
 	if(spawnExpireTimestamp.compareTo(currentTime) > 0) {
 		shutdownAfterUpdate = true;
 	}
 
 	if (shutdownAfterUpdate)
-		setActive(false);
+	{
+		StringBuffer	warnText;
+
+		warnText	<< "Harvester shutting off with hopper size:" << hopperSize
+			<< " and max hopper size:" << hopperSizeMax;
+
+		warning(warnText);
+		
+		setOperating(false);
+	}
 
 	/*InstallationObjectDeltaMessage7* inso7 = new InstallationObjectDeltaMessage7( _this.getReferenceUnsafeStaticCast());
 	inso7->startUpdate(0x0D);
