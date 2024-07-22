@@ -946,7 +946,7 @@ int DirectorManager::checkInt64Lua(lua_State* L) {
 		return 0;
 	}
 
-	instance()->info(true) << "Lua version: " << *lua_version(L);
+	instance()->info(true) << "Lua version: " << lua_version(L);
 
 	uint64 data = lua_tointeger(L, -1);
 
