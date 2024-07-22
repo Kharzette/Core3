@@ -295,9 +295,9 @@ function trainerConvHandler:handleNsfSkillPointsScreen(pConvTemplate, pPlayer, p
 	if (skillNum == nil) then
 		printLuaError("Nil skillNum sent to handleNsfSkillPointsScreen for trainer type " .. trainerType)
 		return pConvScreen
-	elseif (skillNum <= 0) then
-		printLuaError("Invalid skillNum (" .. skillNum .. ") sent to handleNsfSkillPointsScreen for trainer type " .. trainerType)
-		return pConvScreen
+--	elseif (skillNum <= 0) then
+--		printLuaError("Invalid skillNum (" .. skillNum .. ") sent to handleNsfSkillPointsScreen for trainer type " .. trainerType)
+--		return pConvScreen
 	end
 
 	local skillName = skillList[skillNum]
